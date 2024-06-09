@@ -1,31 +1,16 @@
-name: pre-commit
+name: Push Workflow
 
 on:
-  pull_request:
-    branches:
-      - main
   push:
     branches:
-      - main
+      - main  # Trigger on pushes to the 'main' branch
 
 jobs:
-  pre-commit:
+  my_job:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4 
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"  # Replace with your desired Python version
+      - name: Checkout Code
+        uses: actions/checkout@v4  
 
-      - name: Run pre-commit
-        run: |
-          pip install pre-commit
-          git fetch origin
-
-          # Check if event is a pull_request and if pre-commit config exists
-          if [ "${{ github.event_name }}" == "pull_request" ] && [ -f .pre-commit-config.yaml ]; then
-            pre-commit run --from-ref ${{ github.event.pull_request.base.ref }} --to-ref ${{ github.event.pull_request.head.sha }}
-          elif [ -f .pre-commit-config.yaml ]; then  # Run for all files if it's a push or config exists
-            pre-commit run --all-files
-          else
-            echo "No .pre-commit-config.yaml found, skipping pre-commit."
+      - name: Say Hello
+        run: echo "Hello, world! This is a simple push workflow."
