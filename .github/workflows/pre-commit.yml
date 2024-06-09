@@ -1,4 +1,3 @@
-# your-github-repo/.github/workflows/pre-commit.yml
 name: pre-commit
 
 on:
@@ -13,14 +12,17 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v3
+      - uses: actions/checkout@v4 # Use Node.js 20-compatible version
+      - uses: actions/setup-python@v4  # Use Node.js 20-compatible version
       - name: Run pre-commit
         run: |
           pip install pre-commit
           git fetch origin
-          # Ensure this command is only run on pull_request events
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
+
+          # Check if event is a pull_request and if pre-commit config exists
+          if [ "${{ github.event_name }}" == "pull_request" ] && [ -f .pre-commit-config.yaml ]; then
             pre-commit run --from-ref ${{ github.event.pull_request.base.ref }} --to-ref ${{ github.event.pull_request.head.sha }}
-          else
+          elif [ -f .pre-commit-config.yaml ]; then  # Run for all files if it's a push or config exists
             pre-commit run --all-files
+          else
+            echo "No .pre-commit-config.yaml found, skipping pre-commit."
