@@ -1,34 +1,14 @@
-name: Push with Pre-commit
+name: pre-commit
 
 on:
+  pull_request:
   push:
-    branches:
-      - main
+    branches: [main]
 
 jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"  # Replace with your desired Python version
-
-      - name: Install pre-commit
-        run: pip install pre-commit
-
-      - name: Run pre-commit
-        run: pre-commit run --all-files # Runs on all files since it's a push event
- 
-      - name: Commit changes (if any)
-        run: |
-          if ! git diff-index --quiet HEAD --; then
-            git add .
-            git commit -m "Auto-fix by pre-commit"
-            git push
-          fi
-
-      - name: Say Hello 
-        if: always() # Always run, even if pre-commit fails
-        run: echo "Hello, world! This is a push workflow with pre-commit."
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v4
+    - uses: pre-commit/action@v3.0.1
