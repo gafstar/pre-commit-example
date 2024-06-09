@@ -12,8 +12,11 @@ jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4 # Use Node.js 20-compatible version
-      - uses: actions/setup-python@v4  # Use Node.js 20-compatible version
+      - uses: actions/checkout@v4 
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"  # Replace with your desired Python version
+
       - name: Run pre-commit
         run: |
           pip install pre-commit
