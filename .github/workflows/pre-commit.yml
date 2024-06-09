@@ -2,14 +2,13 @@
 name: pre-commit
 
 on:
-  - pull_request
+  pull_request:
+    branches:
+      - main
+  push:
     branches:
       - main
 
-  - push
-    branches:
-      - main
-  
 jobs:
   pre-commit:
     runs-on: ubuntu-latest
@@ -20,4 +19,8 @@ jobs:
         run: |
           pip install pre-commit
           git fetch origin
-          pre-commit run --from-ref origin/${{ github.event.pull_request.base.ref }} --to-ref ${{ github.event.pull_request.head.sha }}
+          # Ensure this command is only run on pull_request events
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            pre-commit run --from-ref ${{ github.event.pull_request.base.ref }} --to-ref ${{ github.event.pull_request.head.sha }}
+          else
+            pre-commit run --all-files
