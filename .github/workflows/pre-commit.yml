@@ -14,3 +14,5 @@ jobs:
         run: "pip install sqlfluff==3.0.7"
       - name: Lint SQL file
         run: "sqlfluff lint models.sql --dialect postgres"
+      - name: Fix SQL file
+        run: "sqlfluff fix models.sql --dialect postgres"
