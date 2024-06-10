@@ -1,3 +1,20 @@
+name: Lint Models
+
+on: [push]
+
+jobs:
+  lint-models:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: "actions/checkout@v4"
+      - uses: "actions/setup-python@v5"
+        with:
+            python-version: "3.10"
+      - name: Install SQLFluff
+        run: "pip install sqlfluff==3.0.7"
+      - name: Lint SQL file
+        run: "sqlfluff lint models.sql --dialect postgres"
+
 name: Lint and Fix Models
 
 on: [push]
@@ -22,6 +39,6 @@ jobs:
         if: failure()  # This step runs only if the previous step fails
         run: sqlfluff fix models.sql --dialect postgres --force
 
-      - name: Commit fixes
-        if: steps.lint.outcome == 'failure'
+      # - name: Commit fixes
+      #   if: steps.lint.outcome == 'failure'
         
