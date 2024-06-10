@@ -9,8 +9,8 @@ jobs:
       - uses: "actions/checkout@v4"
       - uses: "actions/setup-python@v5"
         with:
-            python-version: "3.8"
+            python-version: "3.10"
       - name: Install SQLFluff
-        run: "pip install sqlfluff==0.3.6"
+        run: "pip install sqlfluff==3.0.7"
       - name: Lint models
         run: "sqlfluff lint models"
