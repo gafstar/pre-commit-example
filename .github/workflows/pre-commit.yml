@@ -23,21 +23,25 @@ jobs:
   process-sql:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.10"
+
       - name: Install SQLFluff
         run: pip install sqlfluff==3.0.7
 
       - name: Lint SQL file
-        id: lint
-        run: sqlfluff lint models.sql --dialect postgres
-        continue-on-error: true  # This allows the workflow to continue even if this step fails
+        run: sqlfluff lint models.sql --config pyproject.toml
+        continue-on-error: true  # Allows the workflow to continue even if this step fails
 
       - name: Fix SQL file
         if: failure()  # This step runs only if the previous step fails
-        run: sqlfluff fix models.sql --dialect postgres --force
+        run: sqlfluff fix models.sql --config pyproject.toml --force
+
 
       # - name: Commit fixes
       #   if: steps.lint.outcome == 'failure'
