@@ -1,0 +1,6 @@
+[tool.sqlfluff]
+dialect = "postgres"
+
+[tool.sqlfluff.rules]
+capitalisation_policy = "upper"  # Enforces that all unquoted identifiers must be in uppercase.
+trailing_whitespace = false      # Allows trailing whitespace, overriding the default behavior.
